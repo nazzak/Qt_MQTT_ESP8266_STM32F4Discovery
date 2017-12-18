@@ -4,8 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT += network mqtt
+QT       += core gui mqtt
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -23,10 +22,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+INCLUDEPATH += mqtt_lib
 
 SOURCES += \
         main.cpp \
-        widget.cpp
+    MyScreen.cpp \
+    mqtt_pub.cpp \
+    mqtt_sub.cpp
 
 HEADERS += \
-        widget.h
+    MyScreen.h \
+    mqtt_pub.h \
+    mqtt_sub.h \
+    define.h
