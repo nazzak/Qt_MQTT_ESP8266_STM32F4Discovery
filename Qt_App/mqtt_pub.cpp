@@ -1,7 +1,7 @@
 #include "mqtt_pub.h"
 
 mqtt_pub::mqtt_pub(const QHostAddress& host,
-                   const quint16 port)
+                   const quint16& port)
     :QMQTT::Client(host, port), _number(0)
 {
 

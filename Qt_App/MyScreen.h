@@ -8,6 +8,7 @@
 #include <QBoxLayout>
 #include "mqtt_sub.h"
 #include "mqtt_pub.h"
+#include <QLineEdit>
 
 class MyScreen : public QWidget
 {
@@ -21,12 +22,17 @@ public:
     mqtt_sub *m_subscriber;
     mqtt_pub *m_publisher;
     QTimer *timer;
+    QGridLayout* GLayout;
+    QLineEdit* m_ipAddress;
+    QLineEdit* m_port;
+    QPushButton* m_connect;
 
     ~MyScreen();
 
 private slots:
     void handleButton(void);
     void handleReadyRead(const QMQTT::Message& message);
+    void sl_connect(void);
 
 private:
     void led3On(void);
