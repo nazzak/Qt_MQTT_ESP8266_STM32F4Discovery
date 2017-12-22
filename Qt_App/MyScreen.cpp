@@ -7,12 +7,22 @@
 
 
 MyScreen::MyScreen(QWidget *parent)
-: QWidget(parent)
+    : QWidget(parent)
 {
     QRect rectangle = QApplication::desktop()->screenGeometry();
-    GLayout = new QGridLayout(this);
+#ifdef DESKTOP
+    rectangle.setX(rectangle.width()/4);
+    rectangle.setY(rectangle.height()/4);
+    rectangle.setWidth(rectangle.width()/2);
+    rectangle.setHeight(rectangle.height()/2);
+#endif
+
+    m_GLayout = new QGridLayout(this);
     m_ipAddress = new QLineEdit;
     m_port = new QLineEdit;
+    m_status = new QLabel;
+    m_timer = new QTimer();
+    m_timer->start(1000);
     
     m_connect = new QPushButton("Connect");
     
@@ -26,16 +36,17 @@ MyScreen::MyScreen(QWidget *parent)
     m_push5 = new QPushButton("LED5",this);
     m_push6 = new QPushButton("LED6",this);
     
-    GLayout->addWidget(new QLabel(tr("IP   :")), 0, 0, 1, 1, Qt::AlignLeft);
-    GLayout->addWidget(new QLabel(tr("Port: ")), 1, 0, 1, 1, Qt::AlignLeft);
-    GLayout->addWidget(m_ipAddress, 0, 0, 1, 3, Qt::AlignRight);
-    GLayout->addWidget(m_port, 1, 0, 1, 3, Qt::AlignRight);
-    GLayout->addWidget(m_connect, 2, 0, 1, 3);
-    GLayout->addWidget(m_push3, 3, 1, Qt::AlignBottom);
-    GLayout->addWidget(m_push4, 4, 0, Qt::AlignBottom);
-    GLayout->addWidget(m_push5, 4, 2, Qt::AlignBottom);
-    GLayout->addWidget(m_push6, 5, 1, Qt::AlignBottom);
-    GLayout->setAlignment(Qt::AlignCenter);
+    m_GLayout->addWidget(new QLabel(tr("IP   :")), 0, 0, 1, 1, Qt::AlignLeft);
+    m_GLayout->addWidget(new QLabel(tr("Port: ")), 1, 0, 1, 1, Qt::AlignLeft);
+    m_GLayout->addWidget(m_ipAddress, 0, 0, 1, 3, Qt::AlignRight);
+    m_GLayout->addWidget(m_port, 1, 0, 1, 3, Qt::AlignRight);
+    m_GLayout->addWidget(m_connect, 2, 0, 1, 4);
+    m_GLayout->addWidget(m_status, 3, 2, 1, 3, Qt::AlignRight);
+    m_GLayout->addWidget(m_push3, 4, 1, Qt::AlignBottom);
+    m_GLayout->addWidget(m_push4, 5, 0, Qt::AlignBottom);
+    m_GLayout->addWidget(m_push5, 5, 2, Qt::AlignBottom);
+    m_GLayout->addWidget(m_push6, 6, 1, Qt::AlignBottom);
+    m_GLayout->setAlignment(Qt::AlignCenter);
     
     
     connect(m_push3, &QPushButton::clicked,this, &MyScreen::handleButton);
@@ -45,6 +56,9 @@ MyScreen::MyScreen(QWidget *parent)
     
     connect(m_connect, &QPushButton::clicked,this, &MyScreen::sl_connect);
     
+    //connect(m_subscriber, &mqtt_sub::connected, this, &MyScreen::sl_statusMqtt);
+    //connect(m_subscriber, &mqtt_sub::disconnected, this, &MyScreen::sl_statusMqtt);
+    connect(m_timer, &QTimer::timeout, this, &MyScreen::sl_statusMqtt);
     connect(m_subscriber, &mqtt_sub::received, this, &MyScreen::handleReadyRead);
     
     m_ledState[0] = m_ledState[1] = m_ledState[2] = m_ledState[3] = '0';
@@ -66,6 +80,11 @@ MyScreen::~MyScreen()
     delete m_push4;
     delete m_push5;
     delete m_push6;
+    delete m_timer;
+    delete m_status;
+    delete m_GLayout;
+    delete m_ipAddress;
+    delete m_port;
 }
 
 void MyScreen::handleButton(void)
@@ -136,8 +155,27 @@ void MyScreen::sl_connect(void)
     m_publisher = new mqtt_pub(QHostAddress(m_ipAddress->text()), m_port->text().toShort());
     m_publisher->connectToHost();
     
+    connect(m_timer, &QTimer::timeout, this, &MyScreen::sl_statusMqtt);
     connect(m_subscriber, &mqtt_sub::received, this, &MyScreen::handleReadyRead);
     
+}
+void MyScreen::sl_statusMqtt(void)
+{
+    m_status->setStyleSheet("QLabel { color : red; }");
+    
+    if(m_subscriber->connectionState() == QMQTT::STATE_DISCONNECTED)
+        m_status->setText("Disconnected");
+    
+    if(m_subscriber->connectionState() == QMQTT::STATE_INIT)
+        m_status->setText("---");//("Init");
+    
+    if(m_subscriber->connectionState() == QMQTT::STATE_CONNECTING)
+        m_status->setText("Connecting");
+    
+    if(m_subscriber->connectionState() == QMQTT::STATE_CONNECTED){
+        m_status->setText("Connected");
+        m_status->setStyleSheet("QLabel { color : green; }");
+    }
 }
 
 void MyScreen::led3On()
