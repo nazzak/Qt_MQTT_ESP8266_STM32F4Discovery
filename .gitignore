@@ -2,6 +2,7 @@
 .DS_Store
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /stm32_uart_mqtt/Debug
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
 <<<<<<< HEAD
@@ -14,3 +15,7 @@
 =======
 /build-Qt_App-Qt_5_10_0_for_iOS-Debug
 >>>>>>> Added ios mode
+=======
+/stm32_uart_mqtt/STM32F4DISCOVERY.xml
+/build-Qt_App-Qt_5_10_0_for_iOS-Debug
+>>>>>>> gitignore
