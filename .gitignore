@@ -4,9 +4,13 @@
 <<<<<<< HEAD
 /stm32_uart_mqtt/Debug
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
+<<<<<<< HEAD
 =======
 /stm32_uart_mqtt/.project
 >>>>>>> added some features
 =======
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
 >>>>>>> added gitignore file
+=======
+/build-Qt_App-Qt_5_10_0_for_iOS-Debug
+>>>>>>> Added ios mode
