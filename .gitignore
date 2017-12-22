@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /stm32_uart_mqtt/Debug
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
 <<<<<<< HEAD
@@ -19,3 +20,11 @@
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
 /build-Qt_App-Qt_5_10_0_for_iOS-Debug
 >>>>>>> gitignore
+=======
+/stm32_uart_mqtt/STM32F4DISCOVERY.xml
+/build-Qt_App-Qt_5_10_0_for_iOS-Debug
+<<<<<<< HEAD
+/stm32_uart_mqtt/.project
+=======
+>>>>>>> DEV-Qt
+>>>>>>> e2151d29e1f088dd1f197272b1c74f04d8ebaef2
