@@ -25,14 +25,8 @@ public:
     ~MyScreen();
 
 private slots:
-    void handleButtonLED3(void);
-    void handleButtonLED4(void);
-    void handleButtonLED5(void);
-    void handleButtonLED6(void);
-
+    void handleButton(void);
     void handleReadyRead(const QMQTT::Message& message);
-
-    void processOneThing();
 
 private:
     void led3On(void);
@@ -43,9 +37,6 @@ private:
     void led4Off(void);
     void led5Off(void);
     void led6Off(void);
-    void rfidGranted(void);
-    void rfidDenied(void);
-    void rfidIdle(void);
 };
 
 #endif // WIDGET_H
