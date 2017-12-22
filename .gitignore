@@ -1,38 +1,8 @@
 /Qt_App/Qt_App.pro.user
 .DS_Store
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 /stm32_uart_mqtt/Debug
-/stm32_uart_mqtt/STM32F4DISCOVERY.xml
-<<<<<<< HEAD
-=======
 /stm32_uart_mqtt/.project
->>>>>>> added some features
-=======
-/stm32_uart_mqtt/STM32F4DISCOVERY.xml
->>>>>>> added gitignore file
-=======
 /build-Qt_App-Qt_5_10_0_for_iOS-Debug
->>>>>>> Added ios mode
-=======
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
-/build-Qt_App-Qt_5_10_0_for_iOS-Debug
->>>>>>> gitignore
-=======
-/stm32_uart_mqtt/STM32F4DISCOVERY.xml
-/build-Qt_App-Qt_5_10_0_for_iOS-Debug
-<<<<<<< HEAD
 /stm32_uart_mqtt/.project
-=======
->>>>>>> DEV-Qt
->>>>>>> e2151d29e1f088dd1f197272b1c74f04d8ebaef2
-=======
 STM32F4DISCOVERY.xml
->>>>>>> gitignore update
-=======
-STM32F4DISCOVERY.xml
->>>>>>> 1e24263f23f9db58521e4052e3de64acda693506
