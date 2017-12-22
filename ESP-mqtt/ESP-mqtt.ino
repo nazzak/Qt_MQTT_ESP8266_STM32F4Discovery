@@ -9,9 +9,9 @@ void setup() {
   node.useSerial(115200);
   node.setWIFI("NAZIM", "password");
 
-  node.setMQTT("192.168.1.21", "test", "nazim", "nazim");
+  node.setMQTT("192.168.1.21", "topic1", "topic2", "nazim", "nazim");
   
-  node.setMessage("message");
+  //node.setMessage("message");
   node.go();
 }
 
@@ -19,4 +19,3 @@ void setup() {
 void loop() {
 
 }
-
