@@ -4,6 +4,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /stm32_uart_mqtt/Debug
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
 <<<<<<< HEAD
@@ -28,3 +29,6 @@
 =======
 >>>>>>> DEV-Qt
 >>>>>>> e2151d29e1f088dd1f197272b1c74f04d8ebaef2
+=======
+STM32F4DISCOVERY.xml
+>>>>>>> gitignore update
