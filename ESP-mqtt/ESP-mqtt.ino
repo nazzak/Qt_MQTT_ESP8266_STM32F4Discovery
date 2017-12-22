@@ -11,7 +11,7 @@ void setup() {
 
   node.setMQTT("192.168.1.21", "test", "nazim", "nazim");
   
-  node.setMessage("test");
+  node.setMessage("message");
   node.go();
 }
 

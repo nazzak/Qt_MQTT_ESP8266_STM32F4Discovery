@@ -3,7 +3,7 @@
 
 IOT::IOT()
 {
-
+  Serial.setTimeout(100); //setup serial readString timeout
 }
 
 IOT::~IOT()
@@ -40,8 +40,12 @@ void IOT::setMessage(const char * _toSEND)
 void IOT::go()
 {
   startWifi();
-  if (m_clientMqtt != NULL)
+  if (m_clientMqtt != NULL) {
     m_clientMqtt->setServer(m_mqtt_server, 1883);
+    m_clientMqtt->setCallback(IOT::callback);
+  }
+  else
+    return;
 
   do
   {
@@ -52,16 +56,15 @@ void IOT::go()
 
       m_clientMqtt->loop();
     }
-    delay(5000);
 
-    digitalWrite(m_led_state, LOW);
-    delay(50);
-    digitalWrite(m_led_state, HIGH);
-
-    if (m_clientMqtt != NULL)
-      m_clientMqtt->publish(m_mqtt_topic, m_toSEND, true);
-    else
-      Serial.println("Mqtt not used");
+    if (Serial.available() > 0)
+    {
+      m_serialRead = Serial.readString();
+      if (m_clientMqtt != NULL)
+        m_clientMqtt->publish(m_mqtt_topic, m_serialRead.c_str(), true);
+      else
+        Serial.println("Mqtt not used");
+    }
 
   } while (1);
 }
@@ -84,9 +87,9 @@ void IOT::startWifi()
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
-    digitalWrite(m_led_state, LOW);
-    delay(50);
-    digitalWrite(m_led_state, HIGH);
+    //digitalWrite(m_led_state, LOW);
+    //delay(50);
+    //digitalWrite(m_led_state, HIGH);
   }
 
   Serial.println("");
@@ -103,15 +106,24 @@ void IOT::reconnect()
   while (!m_clientMqtt->connected())
   {
     Serial.print("Attempting MQTT connection...");
-    if (m_clientMqtt->connect("ESP8266Client", m_mqtt_user, m_mqtt_password)) {
+    if (m_clientMqtt->connect("ESP8266Client", m_mqtt_user, m_mqtt_password))
+    {
       Serial.println("connected");
+      m_clientMqtt->subscribe("test2");
     } else {
       Serial.print("failed, rc=");
       Serial.print(m_clientMqtt->state());
       Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
+      // Wait 10 seconds before retrying
       delay(10000);
     }
   }
+}
+
+void IOT::callback(char* topic, byte* payload, unsigned int length) {
+
+  for (int i = 0; i < length; i++)
+    Serial.print((char)payload[i]);
+
 }
 
