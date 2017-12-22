@@ -21,11 +21,12 @@ public:
     char m_ledState[4];
     mqtt_sub *m_subscriber;
     mqtt_pub *m_publisher;
-    QTimer *timer;
-    QGridLayout* GLayout;
+    QTimer *m_timer;
+    QGridLayout* m_GLayout;
     QLineEdit* m_ipAddress;
     QLineEdit* m_port;
     QPushButton* m_connect;
+    QLabel* m_status;
 
     ~MyScreen();
 
@@ -33,6 +34,7 @@ private slots:
     void handleButton(void);
     void handleReadyRead(const QMQTT::Message& message);
     void sl_connect(void);
+    void sl_statusMqtt(void);
 
 private:
     void led3On(void);

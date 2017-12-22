@@ -1,6 +1,8 @@
 #ifndef DEFINE_H
 #define DEFINE_H
 
+#define MOBILE  //DESKTOP
+
 const QHostAddress MQTT_HOST = QHostAddress("192.168.1.21");
 const quint16 MQTT_PORT = 1883;
 const QString TOPIC1 = "topic2";
