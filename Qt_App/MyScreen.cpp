@@ -7,12 +7,11 @@
 MyScreen::MyScreen(QWidget *parent)
     : QWidget(parent)
 {
-
     QRect rectangle = QApplication::desktop()->screenGeometry();
-    rectangle.setX(rectangle.width()/4);
-    rectangle.setY(rectangle.height()/4);
-    rectangle.setWidth(rectangle.width()/2);
-    rectangle.setHeight(rectangle.height()/2);
+    rectangle.setX(rectangle.width() * 0);
+    rectangle.setY(rectangle.height() * 0);
+    rectangle.setWidth(rectangle.width());
+    rectangle.setHeight(rectangle.height());
 
     m_subscriber = new mqtt_sub;
     m_subscriber->connectToHost();
@@ -25,10 +24,10 @@ MyScreen::MyScreen(QWidget *parent)
     m_push5 = new QPushButton("LED5",this);
     m_push6 = new QPushButton("LED6",this);
 
-    m_push6->move((rectangle.width()/4)-50,(rectangle.height()/4)-50);
-    m_push4->move((rectangle.width()*3/8)-50,(rectangle.height()/2)-50);
-    m_push3->move((rectangle.width()/4)-50,(rectangle.height()*3/4)-50);
-    m_push5->move((rectangle.width()/8)-50,(rectangle.height()/2)-50);
+    m_push6->move((rectangle.width()/2)-50,(rectangle.height()*7/16)-50);
+    m_push4->move((rectangle.width()*3/4)-50,(rectangle.height()*10/16)-50);
+    m_push3->move((rectangle.width()/2)-50,(rectangle.height()*13/16)-50);
+    m_push5->move((rectangle.width()/4)-50,(rectangle.height()*10/16)-50);
 
     connect(m_push3, &QPushButton::clicked,this, &MyScreen::handleButton);
     connect(m_push4, &QPushButton::clicked,this, &MyScreen::handleButton);
@@ -36,17 +35,7 @@ MyScreen::MyScreen(QWidget *parent)
     connect(m_push6, &QPushButton::clicked,this, &MyScreen::handleButton);
     connect(m_subscriber, &mqtt_sub::received, this, &MyScreen::handleReadyRead);
 
-    // default state
-    //led3Off();
-    //led4Off();
-    //led5Off();
-    //led6Off();
-
-
-    m_ledState[0]='0';
-    m_ledState[1]='0';
-    m_ledState[2]='0';
-    m_ledState[3]='0';
+    m_ledState[0] = m_ledState[1] = m_ledState[2] = m_ledState[3] = '0';
 
     this->setGeometry(rectangle);
     this->show();
