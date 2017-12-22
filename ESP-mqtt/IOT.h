@@ -10,7 +10,8 @@ class IOT {
     const char * m_wifi_ssid;
     const char * m_wifi_pwd;
     const char * m_mqtt_server;
-    const char * m_mqtt_topic;
+    const char * m_mqtt_topic_in;
+    const char * m_mqtt_topic_out;
     const char * m_mqtt_user;
     const char * m_mqtt_password;
 
@@ -33,7 +34,8 @@ class IOT {
                  const char * _wifi_pwd = WIFI_PASSWORD);
 
     void setMQTT(const char * _mqtt_server = MQTT_SERVER,
-                 const char * _mqtt_topic = MQTT_TOPIC,
+                 const char * _mqtt_topic_in = MQTT_TOPIC_IN,
+                 const char * _mqtt_topic_out = MQTT_TOPIC_OUT,
                  const char * _mqtt_user = MQTT_USER,
                  const char * _mqtt_password = MQTT_PASSWORD);
 

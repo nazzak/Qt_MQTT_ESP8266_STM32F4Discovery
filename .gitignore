@@ -1,4 +1,8 @@
 /Qt_App/Qt_App.pro.user
 .DS_Store
+<<<<<<< HEAD
 /stm32_uart_mqtt/Debug
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
+=======
+/stm32_uart_mqtt/.project
+>>>>>>> added some features

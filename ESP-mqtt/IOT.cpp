@@ -4,6 +4,7 @@
 IOT::IOT()
 {
   Serial.setTimeout(100); //setup serial readString timeout
+  m_clientMqtt = nullptr;
 }
 
 IOT::~IOT()
@@ -21,15 +22,18 @@ void IOT::setWIFI(const char * _wifi_ssid,
 }
 
 void IOT::setMQTT(const char * _mqtt_server,
-                  const char * _mqtt_topic,
+                  const char * _mqtt_topic_in,
+                  const char * _mqtt_topic_out,
                   const char * _mqtt_user,
                   const char * _mqtt_password)
 {
   m_mqtt_server = _mqtt_server;
-  m_mqtt_topic = _mqtt_topic;
+  m_mqtt_topic_in = _mqtt_topic_in;
+  m_mqtt_topic_out = _mqtt_topic_out;
   m_mqtt_user = _mqtt_user;
   m_mqtt_password = _mqtt_password;
-  m_clientMqtt = new PubSubClient(m_espClient);
+  if (m_clientMqtt == nullptr)
+    m_clientMqtt = new PubSubClient(m_espClient);
 }
 
 void IOT::setMessage(const char * _toSEND)
@@ -61,7 +65,7 @@ void IOT::go()
     {
       m_serialRead = Serial.readString();
       if (m_clientMqtt != NULL)
-        m_clientMqtt->publish(m_mqtt_topic, m_serialRead.c_str(), true);
+        m_clientMqtt->publish(m_mqtt_topic_out, m_serialRead.c_str(), true);
       else
         Serial.println("Mqtt not used");
     }
@@ -109,7 +113,7 @@ void IOT::reconnect()
     if (m_clientMqtt->connect("ESP8266Client", m_mqtt_user, m_mqtt_password))
     {
       Serial.println("connected");
-      m_clientMqtt->subscribe("test2");
+      m_clientMqtt->subscribe(m_mqtt_topic_in);
     } else {
       Serial.print("failed, rc=");
       Serial.print(m_clientMqtt->state());
