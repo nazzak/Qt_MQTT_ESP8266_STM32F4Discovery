@@ -2,7 +2,7 @@
 #include <QDebug>
 
 mqtt_sub::mqtt_sub(const QHostAddress& host,
-                    const quint16 port)
+                    const quint16& port)
     : QMQTT::Client(host, port)
     , _qout(stdout)
 {

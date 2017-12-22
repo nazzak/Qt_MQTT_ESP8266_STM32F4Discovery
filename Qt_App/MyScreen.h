@@ -8,6 +8,7 @@
 #include <QBoxLayout>
 #include "mqtt_sub.h"
 #include "mqtt_pub.h"
+#include <QLineEdit>
 
 class MyScreen : public QWidget
 {
@@ -20,19 +21,20 @@ public:
     char m_ledState[4];
     mqtt_sub *m_subscriber;
     mqtt_pub *m_publisher;
-    QTimer *timer;
+    QTimer *m_timer;
+    QGridLayout* m_GLayout;
+    QLineEdit* m_ipAddress;
+    QLineEdit* m_port;
+    QPushButton* m_connect;
+    QLabel* m_status;
 
     ~MyScreen();
 
 private slots:
-    void handleButtonLED3(void);
-    void handleButtonLED4(void);
-    void handleButtonLED5(void);
-    void handleButtonLED6(void);
-
+    void handleButton(void);
     void handleReadyRead(const QMQTT::Message& message);
-
-    void processOneThing();
+    void sl_connect(void);
+    void sl_statusMqtt(void);
 
 private:
     void led3On(void);
@@ -43,9 +45,6 @@ private:
     void led4Off(void);
     void led5Off(void);
     void led6Off(void);
-    void rfidGranted(void);
-    void rfidDenied(void);
-    void rfidIdle(void);
 };
 
 #endif // WIDGET_H

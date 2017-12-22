@@ -2,4 +2,7 @@
 .DS_Store
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
 /build-Qt_App-Qt_5_10_0_for_iOS-Debug
+<<<<<<< HEAD
 /stm32_uart_mqtt/.project
+=======
+>>>>>>> DEV-Qt
