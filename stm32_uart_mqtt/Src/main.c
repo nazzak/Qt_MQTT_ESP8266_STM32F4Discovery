@@ -115,13 +115,24 @@ int main(void)
 		}
 		while (UartReady != SET);
 
-		/* Reset transmission flag */
-		UartReady = RESET;
-
 		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, TxRxData[1]-0x30);
 		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, TxRxData[2]-0x30);
 		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, TxRxData[3]-0x30);
 		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, TxRxData[4]-0x30);
+
+		/* Reset transmission flag */
+		UartReady = RESET;
+
+		if(HAL_UART_Transmit_IT(&huart6, TxRxData, 5) != HAL_OK)
+		{
+			Error_Handler();
+		}
+		while (UartReady != SET);
+
+		/* Reset transmission flag */
+		UartReady = RESET;
+
+
 	}
 	/* USER CODE END 3 */
 
@@ -233,20 +244,20 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
-  /* Set transmission flag: transfer complete */
-  UartReady = SET;
+	/* Set transmission flag: transfer complete */
+	UartReady = SET;
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
-  /* Set transmission flag: transfer complete */
-  UartReady = SET;
+	/* Set transmission flag: transfer complete */
+	UartReady = SET;
 }
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *UartHandle)
 {
-  /* Turn LED3 on: Transfer error in reception/transmission process */
-    for(;;);
+	/* Turn LED3 on: Transfer error in reception/transmission process */
+	for(;;);
 }
 /* USER CODE END 4 */
 
