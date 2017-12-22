@@ -15,8 +15,9 @@ class IOT {
     const char * m_mqtt_password;
 
     const char * m_toSEND;
+    String m_serialRead;
 
-    uint8_t m_led_state;
+    //uint8_t m_led_state;
 
 
     WiFiClient m_espClient;
@@ -44,5 +45,7 @@ class IOT {
 
     void startWifi(void);
     void reconnect(void);
+    static void callback(char* topic, byte* payload, unsigned int length);
 
 };
+
