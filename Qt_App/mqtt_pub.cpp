@@ -10,28 +10,32 @@ mqtt_pub::mqtt_pub(const QHostAddress& host,
     connect(this, &mqtt_pub::disconnected, this, &mqtt_pub::onDisconnected);
 }
 
-    void mqtt_pub::onConnected()
-    {
-        subscribe(TOPIC2, QoS);
-    }
+mqtt_pub::~mqtt_pub(){
+    qDebug() << "Publisher destroyed";
+}
 
-    void mqtt_pub::onTimeout()
-    {
-        QMQTT::Message message(_number, TOPIC2,
-                               QString("Number is %1").arg(_number).toUtf8());
-        publish(message);
-        _number++;
-        if(_number >= 10)
-        {
-            _timer.stop();
-            disconnectFromHost();
-        }
-    }
+void mqtt_pub::onConnected()
+{
+    subscribe(TOPIC2, QoS);
+}
 
-    void mqtt_pub::onDisconnected()
+void mqtt_pub::onTimeout()
+{
+    QMQTT::Message message(_number, TOPIC2,
+                           QString("Number is %1").arg(_number).toUtf8());
+    publish(message);
+    _number++;
+    if(_number >= 10)
     {
-        QTimer::singleShot(0, qApp, &QCoreApplication::quit);
+        _timer.stop();
+        disconnectFromHost();
     }
+}
+
+void mqtt_pub::onDisconnected()
+{
+    QTimer::singleShot(0, qApp, &QCoreApplication::quit);
+}
 
 
 

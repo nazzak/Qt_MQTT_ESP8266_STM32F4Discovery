@@ -12,7 +12,7 @@ class mqtt_sub : public QMQTT::Client
     Q_OBJECT
 public:
     explicit mqtt_sub(const QHostAddress& _host = MQTT_HOST, const quint16& _port = MQTT_PORT);
-    virtual ~mqtt_sub() {}
+    ~mqtt_sub();
 
     QTextStream _qout;
 

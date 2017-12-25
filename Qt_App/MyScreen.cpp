@@ -17,27 +17,21 @@ MyScreen::MyScreen(QWidget *parent)
     rectangle.setHeight(rectangle.height()/2);
 #endif
 
+    m_mqtt = new MqttManager();
+    
     m_GLayout = new QGridLayout(this);
     m_ipAddress = new QLineEdit;
     m_port = new QLineEdit;
     m_status = new QLabel;
-    m_timer = new QTimer();
-    m_timer->start(1000);
     
     m_connect = new QPushButton("Connect");
-    
-    m_subscriber = new mqtt_sub;
-    m_subscriber->connectToHost();
-    m_publisher = new mqtt_pub;
-    m_publisher->connectToHost();
-    
     m_push3 = new QPushButton("LED3",this);
     m_push4 = new QPushButton("LED4",this);
     m_push5 = new QPushButton("LED5",this);
     m_push6 = new QPushButton("LED6",this);
     
     m_GLayout->addWidget(new QLabel(tr("IP   :")), 0, 0, 1, 1, Qt::AlignLeft);
-    m_GLayout->addWidget(new QLabel(tr("Port: ")), 1, 0, 1, 1, Qt::AlignLeft);
+    m_GLayout->addWidget(new QLabel(tr("Port :")), 1, 0, 1, 1, Qt::AlignLeft);
     m_GLayout->addWidget(m_ipAddress, 0, 0, 1, 3, Qt::AlignRight);
     m_GLayout->addWidget(m_port, 1, 0, 1, 3, Qt::AlignRight);
     m_GLayout->addWidget(m_connect, 2, 0, 1, 4);
@@ -56,17 +50,11 @@ MyScreen::MyScreen(QWidget *parent)
     
     connect(m_connect, &QPushButton::clicked,this, &MyScreen::sl_connect);
     
-    //connect(m_subscriber, &mqtt_sub::connected, this, &MyScreen::sl_statusMqtt);
-    //connect(m_subscriber, &mqtt_sub::disconnected, this, &MyScreen::sl_statusMqtt);
-    connect(m_timer, &QTimer::timeout, this, &MyScreen::sl_statusMqtt);
-    connect(m_subscriber, &mqtt_sub::received, this, &MyScreen::handleReadyRead);
+    connect(m_mqtt, &MqttManager::sg_received, this, &MyScreen::handleReadyRead);
     
     m_ledState[0] = m_ledState[1] = m_ledState[2] = m_ledState[3] = '0';
     
-    led3Off();
-    led4Off();
-    led5Off();
-    led6Off();
+    ledsOff();
     
     this->setGeometry(rectangle);
     this->show();
@@ -74,13 +62,11 @@ MyScreen::MyScreen(QWidget *parent)
 
 MyScreen::~MyScreen()
 {
-    delete m_subscriber;
-    delete m_publisher;
+    delete m_mqtt;
     delete m_push3;
     delete m_push4;
     delete m_push5;
     delete m_push6;
-    delete m_timer;
     delete m_status;
     delete m_GLayout;
     delete m_ipAddress;
@@ -89,7 +75,6 @@ MyScreen::~MyScreen()
 
 void MyScreen::handleButton(void)
 {
-    
     QObject* obj = sender();
     if( obj == m_push4 )
         m_ledState[0] == '0' ? m_ledState[0] = '1' : m_ledState[0] = '0';
@@ -111,10 +96,7 @@ void MyScreen::handleButton(void)
     _myMessage[4]=m_ledState[3];
     _myMessage[5]='\0';
     
-    QString str(_myMessage);
-    qDebug() << str;
-    QMQTT::Message message(0, TOPIC2, str.toUtf8());
-    m_publisher->publish(message);
+    m_mqtt->send(static_cast<QString>(_myMessage));
     
 }
 
@@ -137,45 +119,29 @@ void MyScreen::handleReadyRead(const QMQTT::Message &message)
 
 void MyScreen::sl_connect(void)
 {
-    if(m_subscriber != Q_NULLPTR)
-    {
-        m_subscriber->disconnectFromHost();
-        delete m_subscriber;
-    }
+    if(m_mqtt != Q_NULLPTR)
+        delete m_mqtt;
     
-    if(m_publisher != Q_NULLPTR)
-    {
-        m_publisher->disconnectFromHost();
-        delete m_publisher;
-    }
+    m_mqtt = new MqttManager(QHostAddress(this->m_ipAddress->text()), this->m_port->text().toShort());
     
-    m_subscriber = new mqtt_sub(QHostAddress(m_ipAddress->text()), m_port->text().toShort());
-    m_subscriber->connectToHost();
-    
-    m_publisher = new mqtt_pub(QHostAddress(m_ipAddress->text()), m_port->text().toShort());
-    m_publisher->connectToHost();
-    
-    connect(m_timer, &QTimer::timeout, this, &MyScreen::sl_statusMqtt);
-    connect(m_subscriber, &mqtt_sub::received, this, &MyScreen::handleReadyRead);
+    connect(m_mqtt, &MqttManager::sg_received, this, &MyScreen::handleReadyRead);
     
 }
-void MyScreen::sl_statusMqtt(void)
+
+void MyScreen::ledsOn()
 {
-    m_status->setStyleSheet("QLabel { color : red; }");
-    
-    if(m_subscriber->connectionState() == QMQTT::STATE_DISCONNECTED)
-        m_status->setText("Disconnected");
-    
-    if(m_subscriber->connectionState() == QMQTT::STATE_INIT)
-        m_status->setText("---");//("Init");
-    
-    if(m_subscriber->connectionState() == QMQTT::STATE_CONNECTING)
-        m_status->setText("Connecting");
-    
-    if(m_subscriber->connectionState() == QMQTT::STATE_CONNECTED){
-        m_status->setText("Connected");
-        m_status->setStyleSheet("QLabel { color : green; }");
-    }
+    led3On();
+    led4On();
+    led5On();
+    led6On();
+}
+
+void MyScreen::ledsOff()
+{
+    led3Off();
+    led4Off();
+    led5Off();
+    led6Off();
 }
 
 void MyScreen::led3On()

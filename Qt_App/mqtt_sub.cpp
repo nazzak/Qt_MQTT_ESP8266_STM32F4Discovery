@@ -2,7 +2,7 @@
 #include <QDebug>
 
 mqtt_sub::mqtt_sub(const QHostAddress& host,
-                    const quint16& port)
+                   const quint16& port)
     : QMQTT::Client(host, port)
     , _qout(stdout)
 {
@@ -11,20 +11,24 @@ mqtt_sub::mqtt_sub(const QHostAddress& host,
     connect(this, &mqtt_sub::received, this, &mqtt_sub::onReceived);
 }
 
-    void mqtt_sub::onConnected()
-    {
-        _qout << "connected" << endl;
-        subscribe(TOPIC1, QoS);
-    }
+mqtt_sub::~mqtt_sub(){
+    qDebug() << "Subscriber destroyed";
+}
 
-    void mqtt_sub::onSubscribed(const QString& topic)
-    {
-        _qout << "subscribed " << topic << endl;
-    }
+void mqtt_sub::onConnected()
+{
+    _qout << "connected" << endl;
+    subscribe(TOPIC1, QoS);
+}
 
-    void mqtt_sub::onReceived(const QMQTT::Message& message)
-    {
-        _qout << "publish received: \"" << QString::fromUtf8(message.payload())
-              << "\"" << endl;
-    }
+void mqtt_sub::onSubscribed(const QString& topic)
+{
+    _qout << "subscribed " << topic << endl;
+}
+
+void mqtt_sub::onReceived(const QMQTT::Message& message)
+{
+    _qout << "publish received: \"" << QString::fromUtf8(message.payload())
+          << "\"" << endl;
+}
 

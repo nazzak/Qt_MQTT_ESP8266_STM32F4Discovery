@@ -28,10 +28,12 @@ SOURCES += \
         main.cpp \
     MyScreen.cpp \
     mqtt_pub.cpp \
-    mqtt_sub.cpp
+    mqtt_sub.cpp \
+    mqttmanager.cpp
 
 HEADERS += \
     MyScreen.h \
     mqtt_pub.h \
     mqtt_sub.h \
-    define.h
+    define.h \
+    mqttmanager.h

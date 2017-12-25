@@ -12,7 +12,7 @@ class mqtt_pub : public QMQTT::Client
     Q_OBJECT
 public:
     explicit mqtt_pub(const QHostAddress& _host = MQTT_HOST, const quint16& _port = MQTT_PORT);
-    virtual ~mqtt_pub() {}
+    ~mqtt_pub();
 
     QTimer _timer;
     quint16 _number;
