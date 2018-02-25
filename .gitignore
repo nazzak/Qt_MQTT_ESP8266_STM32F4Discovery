@@ -6,3 +6,4 @@
 /stm32_uart_mqtt/STM32F4DISCOVERY.xml
 /stm32_uart_mqtt/.project
 STM32F4DISCOVERY.xml
+/build_release
