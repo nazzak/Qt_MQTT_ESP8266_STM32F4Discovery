@@ -5,7 +5,6 @@
 #include <QBoxLayout>
 
 
-
 MyScreen::MyScreen(QWidget *parent)
     : QWidget(parent)
 {
@@ -21,7 +20,9 @@ MyScreen::MyScreen(QWidget *parent)
     
     m_GLayout = new QGridLayout(this);
     m_ipAddress = new QLineEdit;
+    m_ipAddress->setText("192.168.1.21");
     m_port = new QLineEdit;
+    m_port->setText("1883");
     m_status = new QLabel;
     
     m_connect = new QPushButton("Connect");
@@ -62,15 +63,15 @@ MyScreen::MyScreen(QWidget *parent)
 
 MyScreen::~MyScreen()
 {
-    delete m_mqtt;
-    delete m_push3;
-    delete m_push4;
-    delete m_push5;
-    delete m_push6;
-    delete m_status;
-    delete m_GLayout;
-    delete m_ipAddress;
-    delete m_port;
+    if(m_mqtt) delete m_mqtt;
+    if(m_push3) delete m_push3;
+    if(m_push4) delete m_push4;
+    if(m_push5) delete m_push5;
+    if(m_push6) delete m_push6;
+    if(m_status) delete m_status;
+    if(m_GLayout) delete m_GLayout;
+    if(m_ipAddress) delete m_ipAddress;
+    if(m_port) delete m_port;
 }
 
 void MyScreen::handleButton(void)
@@ -100,10 +101,10 @@ void MyScreen::handleButton(void)
     
 }
 
-void MyScreen::handleReadyRead(const QMQTT::Message &message)
+void MyScreen::handleReadyRead(const QByteArray &message)
 {
     
-    QString string(QString::fromUtf8(message.payload()));
+    QString string(message);
     const char* Rx = string.toStdString().c_str();
     
     m_ledState[0]=Rx[1];
@@ -122,7 +123,8 @@ void MyScreen::sl_connect(void)
     if(m_mqtt != Q_NULLPTR)
         delete m_mqtt;
     
-    m_mqtt = new MqttManager(QHostAddress(this->m_ipAddress->text()), this->m_port->text().toShort());
+    m_mqtt = new MqttManager(m_ipAddress->text(), m_port->text().toInt());
+    m_mqtt->sl_connect();
     
     connect(m_mqtt, &MqttManager::sg_received, this, &MyScreen::handleReadyRead);
     

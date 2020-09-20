@@ -3,7 +3,9 @@
 
 #define DESKTOP //MOBILE
 
-const QHostAddress MQTT_HOST = QHostAddress("192.168.1.21");
+#include <QString>
+
+const QString MQTT_HOST = "192.168.1.21";
 const quint16 MQTT_PORT = 1883;
 const QString TOPIC1 = "topic2";
 const QString TOPIC2 = "topic1";

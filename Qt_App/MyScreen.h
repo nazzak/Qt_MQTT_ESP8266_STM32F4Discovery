@@ -23,14 +23,13 @@ public:
     QLineEdit* m_port;
     QPushButton* m_connect;
     QLabel* m_status;
-
-    MqttManager* m_mqtt;
+    MqttManager * m_mqtt;
 
     ~MyScreen();
 
 private slots:
     void handleButton(void);
-    void handleReadyRead(const QMQTT::Message& message);
+    void handleReadyRead(const QByteArray& message);
     void sl_connect(void);
 
 private:
